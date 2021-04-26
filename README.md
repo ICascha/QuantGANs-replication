@@ -5,4 +5,4 @@ Python files for neural network creation/training, preprocessing and metrics can
 
 Experiments:
 * [S&P 500 QuantGAN training](https://github.com/ICascha/QuantGANs-replication/blob/main/sp500_training.ipynb)
-* [Stylized effects of S&P 500 generated paths]https://github.com/ICascha/QuantGANs-replication/blob/main/stylized_facts_sp500.ipynb
+* [Stylized effects of S&P 500 generated paths](https://github.com/ICascha/QuantGANs-replication/blob/main/stylized_facts_sp500.ipynb)
