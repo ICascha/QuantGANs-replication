@@ -9,6 +9,4 @@ Replication/testing:
 * [Mode collapse of QuantGANs on S&P 500 generated paths](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/mode_collapse_sp500.ipynb)
 
 Personal modifications/approcahes to QuantGANS:
-*
-*
-*
+* [Generating multiple returns (MSFT/AAPL) with pluasible cross-autocorrelations](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/aapl_msft_train.ipynb)
