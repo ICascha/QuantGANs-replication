@@ -11,3 +11,7 @@ Replication/testing:
 
 Personal modifications/approcahes to QuantGANS:
 * [Generating multiple returns (MSFT/AAPL) with plausible cross-autocorrelations](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/aapl_msft_train.ipynb)
+
+
+
+![Image of 2d TCN architecture](https://github.com/ICascha/QuantGANs-replication/blob/main/images/conv2d_tcn.png?raw=true)
