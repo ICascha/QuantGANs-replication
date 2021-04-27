@@ -28,8 +28,8 @@ class GAN:
         self.discriminator = discriminator
         self.generator = generator
 
-        self.generator_optimizer = Adam(lr_d, epsilon=epsilon, beta_1=beta_1, beta_2=beta_2)
-        self.discriminator_optimizer = Adam(lr_g, epsilon=epsilon, beta_1=beta_1, beta_2=beta_2)
+        self.generator_optimizer = Adam(lr_g, epsilon=epsilon, beta_1=beta_1, beta_2=beta_2)
+        self.discriminator_optimizer = Adam(lr_d, epsilon=epsilon, beta_1=beta_1, beta_2=beta_2)
 
     def train(self, data, batch_size, n_batches, additional_d_steps):
         """[summary]

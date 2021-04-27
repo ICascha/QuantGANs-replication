@@ -71,7 +71,7 @@ def add_temporal_block(prev_layer, skip_layer, kernel_size, dilation, n_filters,
     return PReLU(shared_axes=[1,2, 3])(out), skip_out, cropping
 
 
-def make_TCN(dilations, n_filters, use_batchNorm, sigmoid, input_dim, block_size=2):
+def make_TCN(dilations, n_filters, use_batchNorm, one_series_output, sigmoid, input_dim, block_size=2):
     """Creates a causal temporal convolutional network with skip connections.
        This network uses 2D convolutions in order to model multiple timeseries co-dependency.
 
@@ -101,6 +101,9 @@ def make_TCN(dilations, n_filters, use_batchNorm, sigmoid, input_dim, block_size
     output_layer = SpectralNormalization(Conv2D(n_filters, kernel_size=1))(output_layer)
     output_layer = PReLU(shared_axes=[1, 2, 3])(output_layer)
     output_layer = SpectralNormalization(Conv2D(1, kernel_size=1))(output_layer)
+
+    if one_series_output:
+        output_layer = Conv2D(1, (n_series, 1))(output_layer)
 
     if sigmoid:
         output_layer = Activation('sigmoid')(output_layer)
