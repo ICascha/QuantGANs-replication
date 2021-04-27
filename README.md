@@ -13,5 +13,7 @@ Personal modifications/approcahes to QuantGANS:
 * [Generating multiple returns (MSFT/AAPL) with plausible cross-autocorrelations](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/aapl_msft_train.ipynb)
 
 
+## TCN using 2 dimensional convolutions
+I modify a standard TCN with skip layers to use 2d convoltion layers. On the temporal axis we use causal dialated convolutions, and on the other axis we differentiate multiple time-series. Inside a temporal block, we split each convolution layer in multiple convolution layers (depending on the amount of time-series modeled) and concatonate thereafter in order to capture cross dependencies between time-series while having seperate weights for each time-series.
 
 ![Image of 2d TCN architecture](https://github.com/ICascha/QuantGANs-replication/blob/main/images/conv2d_tcn.png?raw=true)
