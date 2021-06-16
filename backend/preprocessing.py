@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.ndimage import shift
 from sklearn.preprocessing import StandardScaler
 from backend.gaussianize import Gaussianize 
 
@@ -14,11 +13,12 @@ def rolling_window(x, k, sparse=True):
     Returns:
         [3d array]: array of rolling windows in the shape (window, timestep, sample).
     """    
-    arr = np.tile(x, (k, 1, 1))
+    out = np.full([k, *x.shape], np.nan)
+    N = len(x)
     for i in range(k):
-            arr[i] = shift(arr[i], (-i, 0), order=0, cval=np.nan)
+        out[i, :N-i] = x[i:]
             
     if not sparse:
-        return arr
+        return out
 
-    return arr[:, :-(k-1)]
+    return out[:, :-(k-1)]
