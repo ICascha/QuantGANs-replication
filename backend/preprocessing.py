@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.ndimage import shift
 from sklearn.preprocessing import StandardScaler
-from gaussianize import Gaussianize 
+from backend.gaussianize import Gaussianize 
 
 def rolling_window(x, k, sparse=True):
     """compute rolling windows from timeseries
