@@ -24,33 +24,31 @@ def add_temporal_block(prev_layer, skip_layer, kernel_size, dilation, fixed_filt
     for _ in range(block_size):
         convs = []
         for _ in range(n_series):
-            convs.append(SpectralNormalization(Conv2D(fixed_filters, (n_series, kernel_size), dilation_rate=(1, dilation)))(prev_layer))
+            prev_block= Lambda(lambda x: x)(block)
+            convs.append(SpectralNormalization(Conv2D(fixed_filters, (n_series, kernel_size), dilation_rate=(1, dilation)))(block))
 
         
-
         block = Concatenate(axis=1)(convs) if len(convs) else convs[0]
         if moving_filters:
-            block = Concatenate(axis=-1)([block, Conv2D(moving_filters, (n_series, kernel_size), dilation_rate=(1, dilation))])
-
+            block = Concatenate(axis=-1)([block, Conv2D(moving_filters, (1, kernel_size), dilation_rate=(1, dilation))(prev_block)])
         if use_batchNorm:
             block = BatchNormalization(axis=3, momentum=.9, epsilon=1e-5, renorm=True, renorm_momentum=.9)(block)
 
         block = PReLU(shared_axes=[2, 3])(block)
-
         
     # As layer output gets smaller, we need to crop less before putting output
     # on the skip path. We cannot infer this directly as tensor shapes may be variable.
     drop_left = block_size * (kernel_size - 1) * dilation
     cropping += drop_left
 
-    if not skip_layer:
+    if skip_layer is None:
         prev_layer = Conv2D(fixed_filters + moving_filters, 1)(prev_layer)
     # add residual connections
     out = Add()([Cropping2D(cropping=((0,0), (drop_left, 0)))(prev_layer), block])
     # crop from left side for skip path
     skip_out = Cropping2D(cropping=((0,0), (rfs-1-cropping, 0)))(out)
     # add current output with 1x1 conv to skip path
-    if skip_layer:
+    if skip_layer is not None:
         skip_out = Add()([skip_layer, SpectralNormalization(Conv2D(fixed_filters + moving_filters, 1))(skip_out)])
     else:
         skip_out = SpectralNormalization(Conv2D(fixed_filters + moving_filters, 1))(skip_out)
@@ -76,15 +74,14 @@ def make_TCN(dilations, fixed_filters, moving_filters, use_batchNorm, one_series
     n_series = input_dim[0]
 
     input_layer = Input(shape=input_dim)
-
-    prev_layer, skip_layer, _ = add_temporal_block(input_layer, None, 1, 1, fixed_filters, moving_filters, n_series, rfs, block_size, use_batchNorm, None)
-                
     cropping = 0
+    prev_layer, skip_layer, _ = add_temporal_block(input_layer, None, 1, 1, fixed_filters, moving_filters, n_series, rfs, block_size, use_batchNorm, cropping)
+                
     for dilation in dilations:
         prev_layer, skip_layer, cropping = add_temporal_block(prev_layer, skip_layer, 2, dilation, fixed_filters, moving_filters, n_series, rfs, block_size, use_batchNorm, cropping)
-        
+
     output_layer = PReLU(shared_axes=[2, 3])(skip_layer)
-    output_layer = SpectralNormalization(Conv2D(n_filters, kernel_size=1))(output_layer)
+    output_layer = SpectralNormalization(Conv2D(fixed_filters + moving_filters, kernel_size=1))(output_layer)
     output_layer = PReLU(shared_axes=[2, 3])(output_layer)
     output_layer = SpectralNormalization(Conv2D(1, kernel_size=1))(output_layer)
 
