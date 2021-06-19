@@ -3,7 +3,7 @@ from tensorflow.keras.models import Model
 from tensorflow.compat.v1.keras.layers import BatchNormalization
 from tensorflow_addons.layers import SpectralNormalization
 
-def add_temporal_block(prev_layer, skip_layer, kernel_size, dilation, n_filters, n_series, rfs, block_size, use_batchNorm, cropping):
+def add_temporal_block(prev_layer, skip_layer, kernel_size, dilation, fixed_filters, moving_filters, n_series, rfs, block_size, use_batchNorm, cropping):
     """Creates a temporal block.
     Args:
         prev_layer (tensorflow.keras.layers.Layer): previous layer to attach to on standard path.
@@ -24,13 +24,19 @@ def add_temporal_block(prev_layer, skip_layer, kernel_size, dilation, n_filters,
     for _ in range(block_size):
         convs = []
         for _ in range(n_series):
-            convs.append(SpectralNormalization(Conv2D(n_filters, (n_series, kernel_size), dilation_rate=(1, dilation)))(prev_layer))
+            convs.append(SpectralNormalization(Conv2D(fixed_filters, (n_series, kernel_size), dilation_rate=(1, dilation)))(prev_layer))
+
+        
 
         block = Concatenate(axis=1)(convs) if len(convs) else convs[0]
-        block = PReLU(shared_axes=[2, 3])(block)
+        if moving_filters:
+            block = Concatenate(axis=-1)([block, Conv2D(moving_filters, (n_series, kernel_size), dilation_rate=(1, dilation))])
 
         if use_batchNorm:
             block = BatchNormalization(axis=3, momentum=.9, epsilon=1e-5, renorm=True, renorm_momentum=.9)(block)
+
+        block = PReLU(shared_axes=[2, 3])(block)
+
         
     # As layer output gets smaller, we need to crop less before putting output
     # on the skip path. We cannot infer this directly as tensor shapes may be variable.
@@ -38,25 +44,26 @@ def add_temporal_block(prev_layer, skip_layer, kernel_size, dilation, n_filters,
     cropping += drop_left
 
     if not skip_layer:
-        prev_layer = Conv2D(n_filters, 1)(prev_layer)
+        prev_layer = Conv2D(fixed_filters + moving_filters, 1)(prev_layer)
     # add residual connections
     out = Add()([Cropping2D(cropping=((0,0), (drop_left, 0)))(prev_layer), block])
     # crop from left side for skip path
     skip_out = Cropping2D(cropping=((0,0), (rfs-1-cropping, 0)))(out)
     # add current output with 1x1 conv to skip path
     if skip_layer:
-        skip_out = Add()([skip_layer, SpectralNormalization(Conv2D(n_filters, 1))(skip_out)])
+        skip_out = Add()([skip_layer, SpectralNormalization(Conv2D(fixed_filters + moving_filters, 1))(skip_out)])
     else:
-        skip_out = SpectralNormalization(Conv2D(n_filters, 1))(skip_out)
+        skip_out = SpectralNormalization(Conv2D(fixed_filters + moving_filters, 1))(skip_out)
 
     return PReLU(shared_axes=[2, 3])(out), skip_out, cropping
 	
-def make_TCN(dilations, n_filters, use_batchNorm, one_series_output, sigmoid, input_dim, block_size=2):
+def make_TCN(dilations, fixed_filters, moving_filters, use_batchNorm, one_series_output, sigmoid, input_dim, block_size=2):
     """Creates a causal temporal convolutional network with skip connections.
        This network uses 2D convolutions in order to model multiple timeseries co-dependency.
     Args:
         dilations (list, tuple): Ordered number of dilations to use for the temporal blocks.
-        n_filters (int): Number of channels in the hidden layers.
+        fixed_filters (int): Number of channels in the hidden layers corresponding fixed over series axis.
+        moving_filters (int): Number of channels in the hidden layers moving over series axis.
         use_batchNorm (bool): Whether to use batch normalization in the temporal blocks. Includes batch Renormalization.
         one_series_output (bool): Whether to collapse the dimension of the series axis to 1 using an additional convolution layer.
         sigmoid (bool): Whether to append the sigmoid activation function at the output of the network.
@@ -70,11 +77,11 @@ def make_TCN(dilations, n_filters, use_batchNorm, one_series_output, sigmoid, in
 
     input_layer = Input(shape=input_dim)
 
-    prev_layer, skip_layer, _ = add_temporal_block(input_layer, None, 1, 1, n_filters, n_series, rfs, block_size, use_batchNorm, None)
+    prev_layer, skip_layer, _ = add_temporal_block(input_layer, None, 1, 1, fixed_filters, moving_filters, n_series, rfs, block_size, use_batchNorm, None)
                 
     cropping = 0
     for dilation in dilations:
-        prev_layer, skip_layer, cropping = add_temporal_block(prev_layer, skip_layer, 2, dilation, n_filters, n_series, rfs, block_size, use_batchNorm, cropping)
+        prev_layer, skip_layer, cropping = add_temporal_block(prev_layer, skip_layer, 2, dilation, fixed_filters, moving_filters, n_series, rfs, block_size, use_batchNorm, cropping)
         
     output_layer = PReLU(shared_axes=[2, 3])(skip_layer)
     output_layer = SpectralNormalization(Conv2D(n_filters, kernel_size=1))(output_layer)
