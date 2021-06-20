@@ -28,7 +28,10 @@ def add_temporal_block(prev_layer, skip_layer, kernel_size, dilation, fixed_filt
             convs.append(SpectralNormalization(Conv2D(fixed_filters, (n_series, kernel_size), dilation_rate=(1, dilation)))(block))
 
         
-        block = Concatenate(axis=1)(convs) if len(convs) else convs[0]
+        if len(convs) > 1:
+		block = Concatenate(axis=1)(convs) 
+	else:
+		block = convs[0]
         if moving_filters:
             block = Concatenate(axis=-1)([block, Conv2D(moving_filters, (1, kernel_size), dilation_rate=(1, dilation))(prev_block)])
         if use_batchNorm:
