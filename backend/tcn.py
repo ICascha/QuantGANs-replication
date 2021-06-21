@@ -27,17 +27,16 @@ def add_temporal_block(prev_layer, skip_layer, kernel_size, dilation, fixed_filt
             prev_block= Lambda(lambda x: x)(block)
             convs.append(SpectralNormalization(Conv2D(fixed_filters, (n_series, kernel_size), dilation_rate=(1, dilation)))(block))
 
-        
         if len(convs) > 1:
-	    block = Concatenate(axis=1)(convs) 
-	else:
-	    block = convs[0]
-        if moving_filters:
-            block = Concatenate(axis=-1)([block, Conv2D(moving_filters, (1, kernel_size), dilation_rate=(1, dilation))(prev_block)])
-        if use_batchNorm:
-            block = BatchNormalization(axis=3, momentum=.9, epsilon=1e-5, renorm=True, renorm_momentum=.9)(block)
+			block = Concatenate(axis=1)(convs) 
+		else:
+			block = convs[0]
+		if moving_filters:
+			block = Concatenate(axis=-1)([block, Conv2D(moving_filters, (1, kernel_size), dilation_rate=(1, dilation))(prev_block)])
+		if use_batchNorm:
+			block = BatchNormalization(axis=3, momentum=.9, epsilon=1e-5, renorm=True, renorm_momentum=.9)(block)
 
-        block = PReLU(shared_axes=[2, 3])(block)
+		block = PReLU(shared_axes=[2, 3])(block)
         
     # As layer output gets smaller, we need to crop less before putting output
     # on the skip path. We cannot infer this directly as tensor shapes may be variable.
