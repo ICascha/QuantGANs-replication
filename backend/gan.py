@@ -15,16 +15,14 @@ class GAN:
     Code taken in part from: https://github.com/tensorflow/docs/blob/master/site/en/tutorials/generative/dcgan.ipynb
     """    
 
-    @staticmethod
-    def discriminator_loss(real_output, fake_output):
-        real_loss = GAN.cross_entropy(tf.ones_like(real_output), real_output)
-        fake_loss = GAN.cross_entropy(tf.zeros_like(fake_output), fake_output)
+    def discriminator_loss(self, real_output, fake_output):
+        real_loss = self.loss(tf.ones_like(real_output), real_output)
+        fake_loss = self.loss(tf.zeros_like(fake_output), fake_output)
         total_loss = real_loss + fake_loss
         return total_loss
 
-    @staticmethod
-    def generator_loss(fake_output):
-        return GAN.cross_entropy(tf.ones_like(fake_output), fake_output)
+    def generator_loss(self, fake_output):
+        return self.loss(tf.ones_like(fake_output), fake_output)
 
     def __init__(self, discriminator, generator, training_input, lr_d=1e-4, lr_g=3e-4, epsilon=1e-8, beta_1=.0, beta_2=0.9, from_logits=True):
         """Create a GAN instance
@@ -96,54 +94,6 @@ class GAN:
             gen_loss = GAN.generator_loss(fake_output)
             gradients_of_generator = gen_tape.gradient(gen_loss, self.generator.trainable_variables)
             self.generator_optimizer.apply_gradients(zip(gradients_of_generator, self.generator.trainable_variables))
-
-    def save(self, folder_path):
-        """save the GAN instance, including training variables
-
-        Args:
-            folder_path (string): path of folder to store GAN setup.
-        """        
-        # see: https://stackoverflow.com/questions/49503748/save-and-load-model-optimizer-state
-        symbolic_weights = getattr(self.generator_optimizer, 'weights')
-        weight_values = K.batch_get_value(symbolic_weights)
-        with open('optimizer.pkl', 'wb') as f:
-            pickle.dump(folder_path + '/w_G', f)
-
-        symbolic_weights = getattr(self.discriminator_optimizer, 'weights')
-        weight_values = K.batch_get_value(symbolic_weights)
-        with open('optimizer.pkl', 'wb') as f:
-            pickle.dump(folder_path + '/w_D', f)
-
-        with open('params', 'wb') as f:
-            pickle.dump(folder_path + '/params', f)
-        
-        self.generator.save(folder_path + '/G')
-        self.discriminator.save(folder_path + '/D')
-
-    @staticmethod
-    def load(folder_path):
-        """load a stored gan instance
-
-        Args:
-            folder_path (string): path of folder to store GAN setup.
-
-        Returns:
-            GAN: GAN instance containing previous training variables.
-        """        
-        generator = load_model(folder_path + '/G')
-        discriminator = load_model(folder_path + '/D')
-
-        # see: https://stackoverflow.com/questions/49503748/save-and-load-model-optimizer-state
-        model.load_weights('weights.h5')
-        with open(folder_path + '/w_G/optimizer.pkl', 'rb') as f:
-            w_G = pickle.load(f)
-        with open(folder_path + '/w_D/optimizer.pkl', 'rb') as f:
-            w_D = pickle.load(f)
-
-        with open(folder_path + '/params', 'rb') as f:
-            params = pickle.load(f)
-
-        return GAN(generator, discriminator, *params)
 
     def train_hook(self, n_batch):
         """Override this method to insert behaviour at every training update.
