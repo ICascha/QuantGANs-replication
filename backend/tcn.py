@@ -29,9 +29,9 @@ def add_temporal_block(prev_layer, skip_layer, kernel_size, dilation, fixed_filt
 
         
         if len(convs) > 1:
-		block = Concatenate(axis=1)(convs) 
+	    block = Concatenate(axis=1)(convs) 
 	else:
-		block = convs[0]
+	    block = convs[0]
         if moving_filters:
             block = Concatenate(axis=-1)([block, Conv2D(moving_filters, (1, kernel_size), dilation_rate=(1, dilation))(prev_block)])
         if use_batchNorm:
