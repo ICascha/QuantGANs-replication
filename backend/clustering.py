@@ -39,7 +39,7 @@ def clustering(real_returns, synth_returns, window_length, n_clusters, random_st
 
     return real_samples, synth_samples, real_bins, synth_bins, total_freq, kmeans
 
-def plot_clustering(synth_samples, synth_bins, total_freq, alpha, bins, figsize):
+def plot_clustering(synth_samples, synth_bins, alpha, bins, figsize):
     """Plut 9 clusters on a 3x3 grid
 
     Args:
