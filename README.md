@@ -1,5 +1,5 @@
-# QuantGANs-replication
-Codes for my thesis project: replicating and modifying quant GANs.
+# Quant GANs replication
+Codes for my thesis project: replicating and modifying Quant GANs.
 
 [paper](https://arxiv.org/abs/1907.06673)
 
@@ -8,13 +8,16 @@ Python files for neural network creation/training, preprocessing and metrics can
 ## Notebook files
 
 Replication/testing:
-* [S&P 500 QuantGAN training](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/sp500_training.ipynb)
+* [S&P 500 Quant GAN training](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/sp500_training.ipynb)
 * [Stylized effects of S&P 500 generated paths](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/stylized_facts_sp500.ipynb)
-* [Mode collapse of QuantGANs on S&P 500 generated paths](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/mode_collapse_sp500.ipynb)
-* [Training and testing for mode collapse of QuantGANS on the stocks compromising the Dow Jones index](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/train_dow_stocks.ipynb)
+* [Mode collapse of Quant GANs on S&P 500 generated paths](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/mode_collapse_sp500.ipynb)
+* [Training and testing for mode collapse of Quant GANS on the stocks compromising the Dow Jones index](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/train_dow_stocks.ipynb)
 
-Personal modifications/approcahes to QuantGANS:
+Personal modifications/approcahes to Quant GANS:
 * [Generating multiple returns (MSFT/AAPL) with plausible cross-autocorrelations](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/aapl_msft_train.ipynb)
+
+Experiments found in the appendix:
+* [TCN with series invariant filters comparison](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/series_invariant_filters.ipynb)
 
 
 ## TCN using 2 dimensional convolutions
