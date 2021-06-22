@@ -17,7 +17,9 @@ Personal modifications/approcahes to Quant GANS:
 * [Generating multiple returns (MSFT/AAPL) with plausible cross-autocorrelations](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/aapl_msft_train.ipynb)
 
 Experiments found in the appendix:
+* [Quant GANs using WGAN](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/series_invariant_filters.ipynb)
 * [TCN with series invariant filters comparison](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/series_invariant_filters.ipynb)
+* [Researching TCN learning bias](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/series_invariant_filters.ipynb)
 
 
 ## TCN using 2 dimensional convolutions
