@@ -20,11 +20,11 @@ def clustering(real_returns, synth_returns, window_length, n_clusters, random_st
         array of total frequency of both real and synthetic returns and a fitted kmeans object
     """    
 
-    real_samples = rolling_window(real_returns, window_length).T.squeeze()
+    real_samples = rolling_window(real_returns, window_length).T.reshape((-1, window_length))
     # We cluster based on synth samples, so we skip ahead twice the window length
     # to avoid interdependencies of windows
     synth_samples = rolling_window(synth_returns, window_length)[:, ::window_length*2].T.reshape((-1, window_length))
-
+    
     kmeans = KMeans(n_clusters=n_clusters, random_state=random_state)
     kmeans.fit(synth_samples)
 
@@ -37,7 +37,7 @@ def clustering(real_returns, synth_returns, window_length, n_clusters, random_st
     total_freq = np.stack([real_freq, synth_freq])
     total_freq = total_freq / total_freq.sum(axis=1, keepdims=True)
 
-    return real_samples, synth_samples, real_bins, synth_bins, total_freq.T, kmeans
+    return real_samples, synth_samples, real_bins, synth_bins, total_freq, kmeans
 
 def plot_clustering(synth_samples, synth_bins, total_freq, alpha, bins, figsize):
     """Plut 9 clusters on a 3x3 grid
