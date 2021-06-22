@@ -37,7 +37,7 @@ def clustering(real_returns, synth_returns, window_length, n_clusters, random_st
     total_freq = np.stack([real_freq, synth_freq])
     total_freq = total_freq / total_freq.sum(axis=1, keepdims=True)
 
-    return real_samples, synth_samples, real_bins, synth_bins, total_freq, kmeans
+    return real_samples, synth_samples, real_bins, synth_bins, total_freq.T, kmeans
 
 def plot_clustering(synth_samples, synth_bins, alpha, bins, figsize):
     """Plut 9 clusters on a 3x3 grid
