@@ -3,7 +3,7 @@ Codes for my thesis project: replicating and modifying Quant GANs.
 
 [paper](https://arxiv.org/abs/1907.06673)
 
-Python files for neural network creation/training, preprocessing and metrics can be found in the backend package.
+Python files for neural network creation/training, preprocessing and metrics can be found in the backend package. Models ought to be trained in Colab or using a PC with a CUDA capable GPU.
 
 ## Notebook files
 
