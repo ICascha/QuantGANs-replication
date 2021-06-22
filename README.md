@@ -17,12 +17,6 @@ Personal modifications/approcahes to Quant GANS:
 * [Generating multiple returns (MSFT/AAPL) with plausible cross-autocorrelations](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/aapl_msft_train.ipynb)
 
 Experiments found in the appendix:
-* [Quant GANs using WGAN](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/series_invariant_filters.ipynb)
+* [Quant GANs using WGAN](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/wgan_sp500.ipynb)
 * [TCN with series invariant filters comparison](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/series_invariant_filters.ipynb)
-* [Researching TCN learning bias](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/series_invariant_filters.ipynb)
-
-
-## TCN using 2 dimensional convolutions
-I modify a standard TCN with skip layers to use 2d convoltion layers. On the temporal axis we use causal dialated convolutions, and on the other axis we differentiate multiple time-series. Inside a temporal block, we split each convolution layer in multiple convolution layers (depending on the amount of time-series modeled) and concatonate thereafter in order to capture cross dependencies between time-series while having seperate weights for each time-series. (See picture for a stylized example, showing computation of just 2 time-steps to avoid clutter).
-
-![Image of 2d TCN architecture](https://github.com/ICascha/QuantGANs-replication/blob/main/images/conv2d_tcn.png?raw=true)
+* [Researching TCN learning bias](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/tcn_training_bias.ipynb)
