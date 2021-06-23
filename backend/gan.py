@@ -127,7 +127,7 @@ class CGAN(GAN):
         input_layer = Input(shape=self.noise_shape)
         concat_to_output = Input(shape=[self.noise_shape[0]//2, floor(self.noise_shape[1]/2), 1])
         output_generator = self.generator(input_layer)
-        output_layer = Concatenate(axis=2)([output_generator, concat_to_output])
+        output_layer = Concatenate(axis=2)([concat_to_output, output_generator])
         self.cond_generator = Model([input_layer, concat_to_output], output_layer)
 
     @tf.function
