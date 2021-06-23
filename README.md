@@ -12,9 +12,10 @@ Replication/testing:
 * [Stylized facts of S&P 500 generated paths](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/stylized_facts_sp500.ipynb)
 * [Mode collapse of Quant GANs on S&P 500 generated paths](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/mode_collapse_sp500.ipynb)
 * [Training and testing for mode collapse of Quant GANS on the stocks compromising the Dow Jones index](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/train_dow_stocks.ipynb)
-
-Modifcations to Quant GANS/different uses:
 * [Generating multiple returns (MSFT/AAPL) with plausible dependencies](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/aapl_msft_train.ipynb)
+
+$\Delta$CoVaR related:
+* [Training conditionally on us publicly listed bank stocks]()
 
 Experiments found in the appendix:
 * [Quant GANs using WGAN](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/wgan_sp500.ipynb)
