@@ -57,7 +57,7 @@ def add_temporal_block(prev_layer, skip_layer, kernel_size, dilation, fixed_filt
 
     return PReLU(shared_axes=[2, 3])(out), skip_out, cropping
 	
-def make_TCN(dilations, fixed_filters, moving_filters, use_batchNorm, one_series_output, sigmoid, input_dim, block_size=2):
+def make_TCN(dilations, fixed_filters, moving_filters, use_batchNorm, one_series_output, sigmoid, input_dim, block_size=2, halve_output_series=False):
     """Creates a causal temporal convolutional network with skip connections.
        This network uses 2D convolutions in order to model multiple timeseries co-dependency.
     Args:
@@ -69,6 +69,7 @@ def make_TCN(dilations, fixed_filters, moving_filters, use_batchNorm, one_series
         sigmoid (bool): Whether to append the sigmoid activation function at the output of the network.
         input_dim (list, tuple): Input dimension of the shape (number of timeseries, timesteps, number of features). Timesteps may be None for variable length timeseries. 
         block_size (int): How many convolution layers to use within a temporal block. Defaults to 2.
+	halve_output_series (bool): Halve the amount of amount series, used in conditional generator. Defaults to False.
     Returns:
         tensorflow.keras.models.Model: a non-compiled keras model.
     """    
@@ -89,6 +90,9 @@ def make_TCN(dilations, fixed_filters, moving_filters, use_batchNorm, one_series
 
     if one_series_output:
         output_layer = SpectralNormalization(Conv2D(1, (n_series, 1)))(output_layer)
+	
+    if halve_output_series:
+        output_layer = Cropping2D(cropping=((n_series//2, 0), (0, 0)))(output_layer)
 
     if sigmoid:
         output_layer = Activation('sigmoid')(output_layer)
