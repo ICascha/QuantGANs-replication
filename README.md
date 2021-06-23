@@ -14,7 +14,7 @@ Replication/testing:
 * [Training and testing for mode collapse of Quant GANS on the stocks compromising the Dow Jones index](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/train_dow_stocks.ipynb)
 * [Generating multiple returns (MSFT/AAPL) with plausible dependencies](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/aapl_msft_train.ipynb)
 
-\Delta CoVaR related:
+`\Delta` CoVaR related:
 * [Training conditionally on us publicly listed bank stocks](https://github.com/ICascha/QuantGANs-replication/blob/main/banking_train.ipynb)
 
 Experiments found in the appendix:
