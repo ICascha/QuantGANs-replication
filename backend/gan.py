@@ -1,7 +1,8 @@
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import Progbar
-from tensorflow.keras.models import load_model
+from tensorflow.keras.models import load_model, Model
+from tensorflow.keras.layers import Input, Concatenate
 from tensorflow import convert_to_tensor
 from math import floor, ceil
 
