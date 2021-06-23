@@ -15,6 +15,7 @@ Replication/testing:
 * [Generating multiple returns (MSFT/AAPL) with plausible dependencies](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/aapl_msft_train.ipynb)
 
 ∆CoVaR related:
+* [Training conditionally on JP Morgan](https://github.com/ICascha/QuantGANs-replication/blob/main/covar_jpcm_train.ipynb)
 * [Training conditionally on us publicly listed bank stocks](https://github.com/ICascha/QuantGANs-replication/blob/main/banking_train.ipynb)
 
 Experiments found in the appendix:
