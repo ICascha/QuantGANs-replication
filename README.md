@@ -23,4 +23,4 @@ Experiments found in the appendix:
 * [TCN with series invariant filters comparison](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/series_invariant_filters.ipynb)
 * [Researching TCN learning bias](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/tcn_training_bias.ipynb)
 
-* Please note that this notebook makes use of an older CGAN implementation. I didn't have the time to use the new CGAN from the backend package here. In order to keep congruent with my thesis I will keep it like this.
+\* Please note that this notebook makes use of an older CGAN implementation. I didn't have the time to use the new CGAN from the backend package here. In order to keep congruent with my thesis I will keep it like this.
