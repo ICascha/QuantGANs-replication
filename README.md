@@ -15,10 +15,12 @@ Replication/testing:
 * [Generating multiple returns (MSFT/AAPL) with plausible dependencies](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/aapl_msft_train.ipynb)
 
 ∆CoVaR related:
-* [Training conditionally on JP Morgan](https://github.com/ICascha/QuantGANs-replication/blob/main/covar_jpcm_train.ipynb)
-* [Training conditionally on us publicly listed bank stocks](https://github.com/ICascha/QuantGANs-replication/blob/main/banking_train.ipynb)
+* [Training and testing conditionally on JP Morgan](https://github.com/ICascha/QuantGANs-replication/blob/main/covar_jpcm_train.ipynb)*
+* [Training and testing conditionally on us publicly listed bank stocks](https://github.com/ICascha/QuantGANs-replication/blob/main/banking_train.ipynb)
 
 Experiments found in the appendix:
 * [Quant GANs using WGAN](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/wgan_sp500.ipynb)
 * [TCN with series invariant filters comparison](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/series_invariant_filters.ipynb)
 * [Researching TCN learning bias](https://nbviewer.jupyter.org/github/ICascha/QuantGANs-replication/blob/main/appendix_experiments/tcn_training_bias.ipynb)
+
+* Please note that this notebook makes use of an older CGAN implementation. I didn't have the time to use the new CGAN from the backend package here. In order to keep congruent with my thesis I will keep it like this.
