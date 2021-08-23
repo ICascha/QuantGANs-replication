@@ -40,7 +40,6 @@ class GAN:
             beta_2 (float, optional): Beta2 parameter of Adam. Defaults to 0.9.
             from_logits (bool, optional): Output range of discriminator, logits imply output on the entire reals. Defaults to True.
         """
-        self._paramaters = [training_input, lr_d, lr_g, epsilon, beta_1, beta_2, from_logits]
         self.discriminator = discriminator
         self.generator = generator
         self.noise_shape = [self.generator.input_shape[1], training_input, self.generator.input_shape[-1]]
@@ -81,7 +80,7 @@ class GAN:
             with tf.GradientTape() as disc_tape:
                 real_output = self.discriminator(data, training=True)
                 fake_output = self.discriminator(generated_data, training=True)
-                disc_loss = GAN.discriminator_loss(real_output, fake_output)
+                disc_loss = self.discriminator_loss(real_output, fake_output)
             
             gradients_of_discriminator = disc_tape.gradient(disc_loss, self.discriminator.trainable_variables)
             self.discriminator_optimizer.apply_gradients(zip(gradients_of_discriminator, self.discriminator.trainable_variables))
@@ -93,7 +92,7 @@ class GAN:
         with tf.GradientTape() as gen_tape:
             generated_data = self.generator(noise, training=True)
             fake_output = self.discriminator(generated_data, training=False)
-            gen_loss = GAN.generator_loss(fake_output)
+            gen_loss = self.generator_loss(fake_output)
             gradients_of_generator = gen_tape.gradient(gen_loss, self.generator.trainable_variables)
             self.generator_optimizer.apply_gradients(zip(gradients_of_generator, self.generator.trainable_variables))
 
